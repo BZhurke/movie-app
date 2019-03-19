@@ -3,5 +3,8 @@ export {
     logout
 } from './auth.js';
 export { 
-    fetchMovies
+    fetchMovies,
+    changeMovie,
+    cancelMovie,
+    changeMovieInit
 } from './movie';

@@ -1,8 +1,35 @@
 .Movie {
-    width: 80%;
+    width: 340px;
+    border-radius: 25px;
     border: 1px solid #eee;
     box-shadow: 0 2px 3px #ccc;
     padding: 10px;
-    margin: 10px auto;
+    margin: 10px;
     box-sizing: border-box;
+    overflow: auto;
+}
+
+.Movie img {
+    display: block;
+    align-content: 'center';
+    margin: 10px auto;
+    height: 445px;
+}
+ 
+.Movie span {
+    display: block;
+    display: -webkit-box;
+    margin: 0 8px;
+    border-bottom: 1px solid #ccc;
+    padding: 5px;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 35px;
+    height: 35px;
+}
+
+.Movie span:hover {
+    overflow: auto;
 }

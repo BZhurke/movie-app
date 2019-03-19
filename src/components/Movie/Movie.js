@@ -5,22 +5,28 @@ import Button from '../UI/Button/Button';
 
 const movie = (props) => {
     const data = [];
+    const sortOrder = ['Poster', 'Title', 'Year', 'Released', 'Runtime', 'Actors', 'Plot'];
     for(let dataName in props.data){
         data.push({
             name: dataName,
             value: props.data[dataName]});
     }
 
+    data.sort((a, b) => {
+        return sortOrder.indexOf(a.name) - sortOrder.indexOf(b.name);
+    });
+
     const dataOutput = data.map(d => {
-        return <span 
-            style={{textTransform: 'capitalize', display: 'block', margin: '0 8px', borderBottom: '1px solid #ccc', padding: '5px'}}
-            key={d.name}>{d.name}: {d.value}</span>
-    })
+        return (
+                d.name==='Poster'   ? <img key={d.name} src={d.value} alt={d.name + d.index}/> 
+                                    : <span key={d.name}>{d.name}: {d.value}</span>
+        );
+    });
     
     return (
     <div className={classes.Movie}>
-        <p>{dataOutput}</p>
-        {props.token ? <Button btnType="Danger">Edit</Button> : null}
+        {dataOutput}
+        {props.token ? <Button btnType="Success" clicked={props.editMovieHandler}>Edit</Button> : null}
     </div>);
 };
 
