@@ -49,7 +49,7 @@ export const auth = (email, password, isSignup) => {
             url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyB6FP9SUqzktjwpES54pPPZ86JbJHaQVWs'
         }
         axios.post(url,authData)
-            .then(response =>{
+            .then(response => {
                 dispatch(authSuccess(response.data.idToken, response.data.localId));
                 dispatch(checkAuthTimeout(response.data.expiresIn))
             })

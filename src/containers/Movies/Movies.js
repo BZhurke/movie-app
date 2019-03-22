@@ -25,7 +25,7 @@ class Movies extends Component {
             return obj.id === id;
         })
         this.props.changeMovieInit();
-        editingForm = <MovieEditForm editingFilm={movieData[0]}/>
+        editingForm = <MovieEditForm editingFilm={ movieData[0] }/>
     }
 
     render() {
@@ -34,19 +34,20 @@ class Movies extends Component {
             movies = (
                 this.props.movies.map(movie => (
                     <Movie 
-                        key = {movie.id}
-                        data = {movie.data}
-                        token = {this.props.token}
+                        key = { movie.id }
+                        data = { movie.data }
+                        token = { this.props.token }
                         editMovieHandler = {() => this.editMovieHandler(movie.id)}
                         />
             )));
         }
         return (
-            <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
-                <Modal show={this.props.editingMode} modalClosed={this.props.onMovieCancel}>
-                    {editingForm}
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+                <Modal  show = { this.props.editingMode }
+                        modalClosed = { this.props.onMovieCancel }>
+                    { editingForm }
                 </Modal>
-                {movies}
+                { movies }
             </div>
         );
     }

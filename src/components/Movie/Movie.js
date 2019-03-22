@@ -18,15 +18,15 @@ const movie = (props) => {
 
     const dataOutput = data.map(d => {
         return (
-                d.name==='Poster'   ? <img key={d.name} src={d.value} alt={d.name + d.index}/> 
-                                    : <span key={d.name}>{d.name}: {d.value}</span>
+                d.name==='Poster'   ? <img key = { d.name } src = { d.value } alt = { d.name }/> 
+                                    : <span key = { d.name }>{ d.name }: { d.value }</span>
         );
     });
     
     return (
-    <div className={classes.Movie}>
-        {dataOutput}
-        {props.token ? <Button btnType="Success" clicked={props.editMovieHandler}>Edit</Button> : null}
+    <div className = { classes.Movie }>
+        { dataOutput }
+        { props.token ? <Button btnType = "Success" clicked = { props.editMovieHandler }>Edit</Button> : null}
     </div>);
 };
 

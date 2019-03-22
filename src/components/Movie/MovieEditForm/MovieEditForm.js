@@ -109,7 +109,7 @@ class MovieEditForm extends Component {
 
     movieSubmitHandler = (event) => {
         event.preventDefault();
-        const formData ={};
+        const formData = {};
         for(let formElementId in this.state.movieForm) {
             formData[formElementId] = this.state.movieForm[formElementId].value;
         }
@@ -174,27 +174,27 @@ class MovieEditForm extends Component {
             <form >
                 {formElementsArray.map(formElement => (
                     <Input
-                        key = {formElement.id}
-                        elementType = {formElement.config.elementType}
-                        elementConfig = {formElement.config.elementConfig}
-                        value = {formElement.config.value}
-                        invalid = {!formElement.config.valid}
-                        shouldValidate = {formElement.config.validation}
-                        touched = {formElement.config.touched}
-                        changed = {(event) => this.inputChangedHandler(event, formElement.id)}
+                        key = { formElement.id }
+                        elementType = { formElement.config.elementType }
+                        elementConfig = { formElement.config.elementConfig }
+                        value = { formElement.config.value }
+                        invalid = { !formElement.config.valid }
+                        shouldValidate = { formElement.config.validation }
+                        touched = { formElement.config.touched }
+                        changed = { (event) => this.inputChangedHandler(event, formElement.id) }
                         />
                 ))}
-                <Button btnType="Danger" clicked={this.movieCancelHandler}>CANCEL</Button>
-                <Button btnType="Success" disabled={!this.state.formIsValid} clicked={this.movieSubmitHandler}>SUBMIT CHANGES</Button>
+                <Button btnType = "Danger" clicked = { this.movieCancelHandler }>CANCEL</Button>
+                <Button btnType = "Success" disabled = { !this.state.formIsValid } clicked = { this.movieSubmitHandler }>SUBMIT CHANGES</Button>
             </form>
         );
         if(this.props.loading){
             form = <Spinner/>;
         }
         return (
-            <div className={classes.MovieEdit}>
+            <div className={ classes.MovieEdit }>
                 <h4>Edit movie details</h4>
-                {form}
+                { form }
             </div>
         );
     }

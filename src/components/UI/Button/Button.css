@@ -1,6 +1,7 @@
 .Button {
     background-color: transparent;
-    border: none;
+    border: 2px double #eee;
+    border-radius: 15px;
     color: white;
     outline: none;
     cursor: pointer;
@@ -8,11 +9,6 @@
     padding: 10px;
     margin: 10px;
     font-weight: bold;
-}
-
-.Button:first-of-type {
-    margin-left: 0;
-    padding-left: 0;
 }
 
 .Button:disabled {
@@ -25,5 +21,5 @@
 }
 
 .Danger {
-    color: #944317;
+    color: #941f17;
 }

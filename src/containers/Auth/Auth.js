@@ -9,7 +9,7 @@ import classes from './Auth.css';
 import * as actions from '../../store/actions/index';
 
 class Auth extends Component {
-    state ={
+    state = {
         controls: {
             email: {
                 elementType: 'input',
@@ -84,7 +84,7 @@ class Auth extends Component {
                 touched: true
             }
         };
-        this.setState({controls: updatedControls});
+        this.setState({ controls: updatedControls });
     }
 
     submitHandler = (event) => {
@@ -94,7 +94,7 @@ class Auth extends Component {
 
     switchAuthModeHandler = () => {
         this.setState(prevState => {
-            return {isSignup: !prevState.isSignup};
+            return { isSignup: !prevState.isSignup };
         });
     }
 
@@ -109,14 +109,14 @@ class Auth extends Component {
 
         let form = formElementsArray.map(formElement => (
             <Input
-                key={formElement.id}
-                elementType={formElement.config.elementType}
-                elementConfig={formElement.config.elementConfig}
-                value={formElement.config.value}
-                invalid={!formElement.config.valid}
-                shouldValidate={formElement.config.validation}
-                touched={formElement.config.touched}
-                changed={(event) => this.inputChangedHandler(event, formElement.id)}/>
+                key = { formElement.id }
+                elementType = { formElement.config.elementType }
+                elementConfig = { formElement.config.elementConfig }
+                value = { formElement.config.value }
+                invalid = { !formElement.config.valid }
+                shouldValidate = { formElement.config.validation }
+                touched = { formElement.config.touched }
+                changed = { (event) => this.inputChangedHandler(event, formElement.id) }/>
         ));
 
         if(this.props.loading){
@@ -126,26 +126,26 @@ class Auth extends Component {
         let errorMessage = null;
         if(this.props.error) {
             errorMessage = (
-                <p>{this.props.error.message}</p>
+                <p>{ this.props.error.message }</p>
             );
         }
 
         let authRedirect = null;
         if(this.props.isAuth){
-            authRedirect = <Redirect to="/"/>
+            authRedirect = <Redirect to = "/"/>
         }
 
         return (
-            <div className={classes.Auth}>
-                {authRedirect}
-                {errorMessage}
-                <form onSubmit={this.submitHandler}>
-                    {form}
+            <div className={ classes.Auth }>
+                { authRedirect }
+                { errorMessage }
+                <form onSubmit = { this.submitHandler }>
+                    { form }
                     <Button btnType="Success">SUBMIT</Button>
                 </form>
                 <Button 
-                    clicked={this.switchAuthModeHandler}
-                    btnType="Danger">SWITCH TO {this.state.isSignup ? 'SIGNIN' : 'SIGNUP'}</Button>
+                    clicked = { this.switchAuthModeHandler }
+                    btnType="Danger">SWITCH TO { this.state.isSignup ? 'SIGNIN' : 'SIGNUP' }</Button>
             </div>
         );
     }
@@ -161,7 +161,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: (email, password, isSignup)=> dispatch(actions.auth(email, password, isSignup))
+        onAuth: (email, password, isSignup) => dispatch(actions.auth(email, password, isSignup))
     };
 };
 

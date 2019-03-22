@@ -8,42 +8,42 @@ const initState = {
 }
 
 const fetchMoviesStart = (state, action) => {
-    return updateObject(state, {loading: true });
+    return updateObject(state, { loading: true });
 }
 
 const fetchMoviesSuccess = (state, action) => {
-    return updateObject(state, {movies: action.movies, loading: false});
+    return updateObject(state, { movies: action.movies, loading: false });
 }
 
 const fetchMoviesFail = (state, action) => {
-    return updateObject(state, {loading: false});
+    return updateObject(state, { loading: false });
 }
 
 const changeMovieStart = (state, action) => {
-    return updateObject(state, {loading: true});
+    return updateObject(state, { loading: true });
 }
 
 const changeMovieSuccess = (state, action) => {
     let newMovies = state.movies;
     for (let i in newMovies){
-        if(newMovies[i].id===action.movie[0].id){
+        if(newMovies[i].id === action.movie[0].id){
             newMovies[i].data = action.movie[0].data;
             break;
         }
     }
-    return updateObject(state, {movies: newMovies, loading: false, editingMode: false});
+    return updateObject(state, { movies: newMovies, loading: false, editingMode: false });
 }
 
 const changeMovieFail = (state, action) => {
-    return updateObject(state, {loading: false});
+    return updateObject(state, { loading: false });
 }
 
 const cancelMovie = (state, action) => {
-    return updateObject(state, {editingMode: false});
+    return updateObject(state, { editingMode: false });
 }
 
 const changeMovieInit = (state, action) => {
-    return updateObject(state, {editingMode: true});
+    return updateObject(state, { editingMode: true });
 }
 
 const reducer = (state = initState, action) => {

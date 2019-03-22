@@ -23,7 +23,7 @@ const store = createStore(rootReducer, composeEnhancers(
 ));
 
 const app = (
-    <Provider store={ store }>
+    <Provider store = { store }>
         <BrowserRouter>
             <App/>
         </BrowserRouter>
