@@ -16,7 +16,8 @@ class MovieEditForm extends Component {
                 elementType: 'input',
                 elementConfig: {
                     text: 'text',
-                    placeholder: 'Title'
+                    placeholder: 'Poster Link',
+                    label: 'Poster Link'
                 },
                 value: this.props.editingFilm.data.Poster,
                 validation: {
@@ -29,7 +30,8 @@ class MovieEditForm extends Component {
                 elementType: 'input',
                 elementConfig: {
                     text: 'text',
-                    placeholder: 'Title'
+                    placeholder: 'Title',
+                    label: 'Title'
                 },
                 value: this.props.editingFilm.data.Title,
                 validation: {
@@ -42,7 +44,8 @@ class MovieEditForm extends Component {
                 elementType: 'input',
                 elementConfig: {
                     text: 'text',
-                    placeholder: 'Year'
+                    placeholder: 'Year',
+                    label: 'Year'
                 },
                 value: this.props.editingFilm.data.Year,
                 validation: {
@@ -55,7 +58,8 @@ class MovieEditForm extends Component {
                 elementType: 'input',
                 elementConfig: {
                     text: 'text',
-                    placeholder: 'Released'
+                    placeholder: 'Released',
+                    label: 'Released'
                 },
                 value: this.props.editingFilm.data.Released,
                 validation: {
@@ -68,7 +72,8 @@ class MovieEditForm extends Component {
                 elementType: 'input',
                 elementConfig: {
                     text: 'text',
-                    placeholder: 'Runtime'
+                    placeholder: 'Runtime',
+                    label: 'Runtime'
                 },
                 value: this.props.editingFilm.data.Runtime,
                 validation: {
@@ -81,7 +86,8 @@ class MovieEditForm extends Component {
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeholder: 'Actors'
+                    placeholder: 'Actors',
+                    label: 'Actors'
                 },
                 value: this.props.editingFilm.data.Actors,
                 validation: {
@@ -94,7 +100,8 @@ class MovieEditForm extends Component {
                 elementType: 'input',
                 elementConfig: {
                     text: 'text',
-                    placeholder: 'Plot'
+                    placeholder: 'Plot',
+                    label: 'Plot'
                 },
                 value: this.props.editingFilm.data.Plot,
                 validation: {
@@ -175,6 +182,7 @@ class MovieEditForm extends Component {
                 {formElementsArray.map(formElement => (
                     <Input
                         key = { formElement.id }
+                        label = { formElement.config.elementConfig.label } 
                         elementType = { formElement.config.elementType }
                         elementConfig = { formElement.config.elementConfig }
                         value = { formElement.config.value }

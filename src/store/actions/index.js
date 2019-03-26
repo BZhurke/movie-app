@@ -6,5 +6,6 @@ export {
     fetchMovies,
     changeMovie,
     cancelMovie,
-    changeMovieInit
+    changeMovieInit,
+    searchMovie
 } from './movie';

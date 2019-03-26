@@ -38,8 +38,8 @@ export const fetchMovies = () => {
         .catch(err => {
            dispatch(fetchMoviesFail(err));
         });
-    }
-}
+    };
+};
 
 export const changeMovieSuccess = (movie) => {
     return {
@@ -84,11 +84,54 @@ export const changeMovie = (movie, token) => {
 export const cancelMovie = () => {
     return {
         type: actionTypes.CHANGE_MOVIE_CANCEL
-    }
+    };
 };
 
 export const changeMovieInit = () => {
     return {
         type: actionTypes.CHANGE_MOVIE_INIT
-    }
-}
+    };
+};
+
+export const searchStart = () => {
+    return {
+        type: actionTypes.SEARCH_MOVIES_START
+    };
+};
+
+export const searchSuccess = (fetchedMovies) => {
+    return {
+        type: actionTypes.SEARCH_MOVIES_SUCCESS,
+        movies: fetchedMovies
+    };
+};
+
+export const searchFail = (error) => {
+    return {
+        type: actionTypes.SEARCH_MOVIES_FAIL,
+        error: error
+    };
+};
+
+export const searchMovie = (movieName) => {
+    return dispatch => {
+        dispatch (searchStart());
+        let url = 'http://www.omdbapi.com/?apikey=a9d8a61e&s=' + movieName;
+        axios.get(url)
+            .then(response => {
+                const fetchedMovies = [];
+                for (let key in response.data.Search){
+                    fetchedMovies.push({
+                        data: response.data.Search[key],
+                        id: response.data.Search[key].imdbID
+                    });
+                }
+                console.log(fetchedMovies);
+                dispatch(searchSuccess(fetchedMovies));
+            })
+            .catch(error => {
+                dispatch(searchFail(error));
+            })
+    };
+
+};

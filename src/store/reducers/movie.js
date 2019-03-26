@@ -46,6 +46,18 @@ const changeMovieInit = (state, action) => {
     return updateObject(state, { editingMode: true });
 }
 
+const searchMovieStart = (state, action) => {
+    return updateObject(state, {loading: true});
+}
+
+const searchMovieFail = (state, action) => {
+    return updateObject(state, {loading: false});
+}
+
+const searchMovieSuccess = (state, action) => {
+    return updateObject(state, { movies: action.movies, loading: false });
+}
+
 const reducer = (state = initState, action) => {
     switch(action.type){
         case actionTypes.FETCH_MOVIES_START: return fetchMoviesStart(state, action);
@@ -56,6 +68,9 @@ const reducer = (state = initState, action) => {
         case actionTypes.CHANGE_MOVIE_FAIL: return changeMovieFail(state, action);
         case actionTypes.CHANGE_MOVIE_CANCEL: return cancelMovie(state, action);
         case actionTypes.CHANGE_MOVIE_INIT: return changeMovieInit(state, action);
+        case actionTypes.SEARCH_MOVIES_START: return searchMovieStart(state, action);
+        case actionTypes.SEARCH_MOVIES_FAIL: return searchMovieFail(state, action);
+        case actionTypes.SEARCH_MOVIES_SUCCESS: return searchMovieSuccess(state, action);
         default: return state;
     }
 };
