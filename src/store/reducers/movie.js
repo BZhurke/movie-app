@@ -47,7 +47,7 @@ const changeMovieInit = (state, action) => {
 }
 
 const searchMovieStart = (state, action) => {
-    return updateObject(state, {loading: true});
+    return updateObject(state, {movies: [], loading: true});
 }
 
 const searchMovieFail = (state, action) => {

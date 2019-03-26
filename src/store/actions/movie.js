@@ -126,7 +126,6 @@ export const searchMovie = (movieName) => {
                         id: response.data.Search[key].imdbID
                     });
                 }
-                console.log(fetchedMovies);
                 dispatch(searchSuccess(fetchedMovies));
             })
             .catch(error => {
