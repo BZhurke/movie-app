@@ -116,7 +116,7 @@ export const searchFail = (error) => {
 export const searchMovie = (movieName) => {
     return dispatch => {
         dispatch (searchStart());
-        let url = 'http://www.omdbapi.com/?apikey=a9d8a61e&s=' + movieName;
+        let url = 'https://www.omdbapi.com/?apikey=a9d8a61e&s=' + movieName;
         axios.get(url)
             .then(response => {
                 const fetchedMovies = [];
