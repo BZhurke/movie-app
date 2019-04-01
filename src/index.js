@@ -10,12 +10,14 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import movieReducer from './store/reducers/movie';
 import authReducer from './store/reducers/auth';
+import editMovie from './store/reducers/movieDetails';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
     movies: movieReducer,
-    auth: authReducer
+    auth: authReducer,
+    editMovie: editMovie 
 });
 
 const store = createStore(rootReducer, composeEnhancers(

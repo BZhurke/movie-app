@@ -1,11 +1,3 @@
-export {
-    auth,
-    logout
-} from './auth.js';
-export { 
-    fetchMovies,
-    changeMovie,
-    cancelMovie,
-    changeMovieInit,
-    searchMovie
-} from './movie';
+export { auth, logout } from './auth.js';
+export { fetchMovies, searchMovie } from './movie';
+export { changeMovie, cancelMovie, changeMovieInit, selectedMovie } from './movieDetails';

@@ -2,16 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Movie from '../../components/Movie/Movie';
-import MovieEditForm from '../../components/Movie/MovieEditForm/MovieEditForm';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
-import Modal from '../../components/UI/Modal/Modal';
 import axios from '../../axios-movie';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as action from '../../store/actions/index';
 
-let editingForm = null;
 
 class Movies extends Component {
     state = {
@@ -42,7 +39,9 @@ class Movies extends Component {
             return obj.id === id;
         })
         this.props.changeMovieInit();
-        editingForm = <MovieEditForm editingFilm={ movieData[0] }/>
+        this.props.history.push('/film/'+id);
+        this.props.selectedMovie(movieData[0]);
+        //editingForm = <MovieEditForm editingFilm={ movieData[0] }/>
     }
 
     inputChangeHandler = (event, controlName) => {
@@ -87,8 +86,7 @@ class Movies extends Component {
                     <Movie 
                         key = { movie.id }
                         data = { movie.data }
-                        token = { this.props.token }
-                        editMovieHandler = {() => this.editMovieHandler(movie.id)}
+                        clicked = {() => this.editMovieHandler(movie.id)}
                         />
             )));
         }
@@ -99,10 +97,6 @@ class Movies extends Component {
                     <Button btnType="Success">SEARCH</Button>
                 </form>
                 <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-                    <Modal  show = { this.props.editingMode }
-                            modalClosed = { this.props.onMovieCancel }>
-                        { editingForm }
-                    </Modal>
                     { movies }
                 </div>
             </React.Fragment>
@@ -115,7 +109,8 @@ const mapDispatchToProps = dispatch => {
         onFetchMovies: (token) => dispatch(action.fetchMovies(token)),
         onMovieCancel: () => dispatch(action.cancelMovie()),
         changeMovieInit: () => dispatch(action.changeMovieInit()),
-        onSearchMovie: (movieName) => dispatch(action.searchMovie(movieName))
+        onSearchMovie: (movieName) => dispatch(action.searchMovie(movieName)),
+        selectedMovie: (movieData) => dispatch(action.selectedMovie(movieData))
     };
 };
 

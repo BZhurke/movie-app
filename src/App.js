@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
 import Layout from './hoc/Layout/Layout';
 import Auth from './containers/Auth/Auth';
 import Logout from './containers/Auth/Logout/Logout';
 import Movies from './containers/Movies/Movies';
+import MovieDetails from './containers/MovieDetails/MovieDetails';
 
 class App extends Component {
   render() {
@@ -14,7 +15,9 @@ class App extends Component {
           <Switch>
             <Route path = "/auth" component = { Auth }/>
             <Route path = "/logout" component = { Logout }/>
-            <Route path = "/" exact component = { Movies }/>
+            <Route path = "/dashboard" component = { Movies }/>
+            <Route path = "/film" component = { MovieDetails }/>
+            <Route path = "/" exact render = {() => (<Redirect to = "/dashboard"/>)}/>
           </Switch>
         </Layout>
       </div>

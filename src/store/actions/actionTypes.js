@@ -12,6 +12,8 @@ export const CHANGE_MOVIE_FAIL = 'CHANGE_MOVIE_FAIL';
 export const CHANGE_MOVIE_CANCEL = 'CHANGE_MOVIE_CANCEL';
 export const CHANGE_MOVIE_INIT = 'CHANGE_MOVIE_INIT';
 
+export const SELECTED_MOVIE = 'SELECTED_MOVIE';
+
 export const AUTH_START = 'AUTH_START';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';
 export const AUTH_FAIL = 'AUTH_FAIL';
