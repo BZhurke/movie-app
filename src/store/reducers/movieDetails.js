@@ -35,7 +35,6 @@ const changeMovieInit = (state, action) => {
 }
 
 const selectedMovie = (state, action) => {
-    console.log(action.selectedMovie);
     return updateObject(state, { editableMovie: action.selectedMovie });
 }
 

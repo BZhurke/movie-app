@@ -68,13 +68,17 @@ export const searchMovie = (movieName) => {
         axios.get(url)
             .then(response => {
                 const fetchedMovies = [];
-                for (let key in response.data.Search){
-                    fetchedMovies.push({
-                        data: response.data.Search[key],
-                        id: response.data.Search[key].imdbID
-                    });
+                if(response.data.Search) {
+                    for (let key in response.data.Search){
+                        fetchedMovies.push({
+                            data: response.data.Search[key],
+                            id: response.data.Search[key].imdbID
+                        });
+                    }
+                    dispatch(searchSuccess(fetchedMovies));
+                } else {
+                    dispatch(searchFail(response.data.Error));
                 }
-                dispatch(searchSuccess(fetchedMovies));
             })
             .catch(error => {
                 dispatch(searchFail(error));

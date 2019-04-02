@@ -17,10 +17,12 @@ const movie = (props) => {
 
     const dataOutput = data.map(d => {
         return (
-                d.name === 'Poster' ? <img key = { d.name } src = { d.value } alt = { d.name } /> 
-                                    : <span key = { d.name }>{ d.name }: { d.value }</span>
+                d.name === 'Poster' ? <img key = { d.name } src = { d.value } alt = { d.name } /> :
+                d.name === 'Title' ?  <span key = { d.name }>{ d.name }: { d.value }</span> :
+                d.name === 'Plot' ?  <span key = { d.name }>{ d.name }: { d.value }</span> : null
         );
     });
+
     
     return (
     <div className = { classes.Movie } onClick = {props.clicked}>

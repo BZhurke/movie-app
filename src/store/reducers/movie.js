@@ -3,7 +3,8 @@ import { updateObject } from '../utility';
 
 const initState = {
     movies: [],
-    loading: false
+    loading: false,
+    error: null
 }
 
 const fetchMoviesStart = (state, action) => {
@@ -11,7 +12,7 @@ const fetchMoviesStart = (state, action) => {
 }
 
 const fetchMoviesSuccess = (state, action) => {
-    return updateObject(state, { movies: action.movies, loading: false });
+    return updateObject(state, { movies: action.movies, loading: false, error: null });
 }
 
 const fetchMoviesFail = (state, action) => {
@@ -19,15 +20,15 @@ const fetchMoviesFail = (state, action) => {
 }
 
 const searchMovieStart = (state, action) => {
-    return updateObject(state, {movies: [], loading: true});
+    return updateObject(state, {movies: [], loading: true, error: null});
 }
 
 const searchMovieFail = (state, action) => {
-    return updateObject(state, {loading: false});
+    return updateObject(state, {loading: false, error: action.error});
 }
 
 const searchMovieSuccess = (state, action) => {
-    return updateObject(state, { movies: action.movies, loading: false });
+    return updateObject(state, { movies: action.movies, loading: false, error: null });
 }
 
 const reducer = (state = initState, action) => {

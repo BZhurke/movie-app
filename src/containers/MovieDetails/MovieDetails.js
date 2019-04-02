@@ -4,181 +4,100 @@ import { connect } from 'react-redux';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import Modal from '../../components/UI/Modal/Modal';
+import MovieEditForm from '../../components/Movie/MovieEditForm/MovieEditForm';
 import classes from '../../components/Movie/MovieEditForm/MovieEditForm.css'
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../axios-movie';
 import * as actions from '../../store/actions/index';
 
+let editForm = null;
+
 class MovieDetails extends Component {
     state = {
-        movieForm: {
-            Poster: {
-                elementType: 'input',
-                elementConfig: {
-                    text: 'text',
-                    placeholder: 'Poster Link',
-                    label: 'Poster Link'
-                },
-                value: this.props.selectedMovie.data.Poster,
-                validation: {
-                    required: true
-                },
-                valid: true,
-                touched: false
-            },
+        movieDetails: {
             Title: {
                 elementType: 'input',
                 elementConfig: {
                     text: 'text',
                     placeholder: 'Title',
-                    label: 'Title'
+                    label: 'Title',
+                    readOnly: 'readOnly'
                 },
-                value: this.props.selectedMovie.data.Title,
-                validation: {
-                    required: true
-                },
-                valid: true,
-                touched: false
+                value: this.props.selectedMovie.data.Title
             },
             Year: {
                 elementType: 'input',
                 elementConfig: {
                     text: 'text',
                     placeholder: 'Year',
-                    label: 'Year'
-                },
-                value: this.props.selectedMovie.data.Year,
-                validation: {
-                    required: true
-                },
-                valid: true,
-                touched: false
+                    label: 'Year',
+                    readOnly: 'readOnly'
+                }
             },
             Released: {
                 elementType: 'input',
                 elementConfig: {
                     text: 'text',
                     placeholder: 'Released',
-                    label: 'Released'
-                },
-                value: this.props.selectedMovie.data.Released,
-                validation: {
-                    required: true
-                },
-                valid: true,
-                touched: false
+                    label: 'Released',
+                    readOnly: 'readOnly'
+                }
             },
             Runtime: {
                 elementType: 'input',
                 elementConfig: {
                     text: 'text',
                     placeholder: 'Runtime',
-                    label: 'Runtime'
-                },
-                value: this.props.selectedMovie.data.Runtime,
-                validation: {
-                    required: true
-                },
-                valid: true,
-                touched: false
+                    label: 'Runtime',
+                    readOnly: 'readOnly'
+                }
             },
             Actors: {
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
                     placeholder: 'Actors',
-                    label: 'Actors'
-                },
-                value: this.props.selectedMovie.data.Actors,
-                validation: {
-                    required: true
-                },
-                valid: true,
-                touched: false
+                    label: 'Actors',
+                    readOnly: 'readOnly'
+                }
             },
             Plot: {
-                elementType: 'input',
+                elementType: 'textarea',
                 elementConfig: {
                     text: 'text',
                     placeholder: 'Plot',
-                    label: 'Plot'
-                },
-                value: this.props.selectedMovie.data.Plot,
-                validation: {
-                    required: true
-                },
-                valid: true,
-                touched: false
+                    label: 'Plot',
+                    readOnly: 'readOnly'
+                }
             }
-        },
-        formIsValid: false
+        }
     }
 
-    movieSubmitHandler = (event) => {
-        event.preventDefault();
-        const formData = {};
-        for(let formElementId in this.state.movieForm) {
-            formData[formElementId] = this.state.movieForm[formElementId].value;
-        }
-        const movie = {
-            [this.props.selectedMovie.id]: {data: formData}
-        }
-        this.props.onMovieChange(movie, this.props.token);
+    editingModeCloseHandler = () => {
+        this.props.onMovieCancel();
+    }
+
+    movieEditHandler = (event) => {
+        event.preventDefault()
+        this.props.changeMovieInit();
+        editForm = <MovieEditForm editingFilm={ this.props.selectedMovie }/>
     }
 
     movieCancelHandler = (event) => {
         event.preventDefault();
         this.props.onMovieCancel();
     }
-
-
-    inputChangedHandler = (event, inputId) =>{
-        const updatedMovieForm = {
-            ...this.state.movieForm
-        };
-        const updatedFormElement = {
-            ...updatedMovieForm[inputId]
-        };
-        updatedFormElement.value = event.target.value;
-        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
-        updatedFormElement.touched = true;
-        updatedMovieForm[inputId] = updatedFormElement;
-
-        let formIsValid = true;
-        for(let inputId in updatedMovieForm) {
-            formIsValid = updatedMovieForm[inputId].valid && formIsValid;
-        }
-        this.setState({movieForm: updatedMovieForm, formIsValid: formIsValid});
-    }
-
-    checkValidity(value, rules) {
-        let isValid = true;
-        if (!rules) {
-            return true;
-        }
-        
-        if (rules.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
-
-        if (rules.isNumeric) {
-            const pattern = /^\d+$/;
-            isValid = pattern.test(value) && isValid
-        }
-
-        return isValid;
-    }
-
     render() {
         const formElementsArray = [];
-        for (let key in this.state.movieForm) {
+        for (let key in this.state.movieDetails) {
             formElementsArray.push({
                 id: key,
-                config: this.state.movieForm[key]
+                config: this.state.movieDetails[key]
             });
         }
         let form = (
-            <form >
+            <form>
                 {formElementsArray.map(formElement => (
                     <Input
                         key = { formElement.id }
@@ -186,14 +105,9 @@ class MovieDetails extends Component {
                         elementType = { formElement.config.elementType }
                         elementConfig = { formElement.config.elementConfig }
                         value = { formElement.config.value }
-                        invalid = { !formElement.config.valid }
-                        shouldValidate = { formElement.config.validation }
-                        touched = { formElement.config.touched }
-                        changed = { (event) => this.inputChangedHandler(event, formElement.id) }
                         />
                 ))}
-                <Button btnType = "Danger" clicked = { this.movieCancelHandler }>CANCEL</Button>
-                <Button btnType = "Success" disabled = { !this.state.formIsValid } clicked = { this.movieSubmitHandler }>SUBMIT CHANGES</Button>
+                <Button btnType = "Success" disabled = { !this.props.token } clicked = { (event) => this.movieEditHandler(event) }>EDIT DETAILS</Button>
             </form>
         );
         if(this.props.loading){
@@ -201,7 +115,11 @@ class MovieDetails extends Component {
         }
         return (
             <div className={ classes.MovieEdit }>
-                <h4>Edit movie details</h4>
+                <Modal  show = { this.props.editingMode }
+                    modalClosed = { this.props.onMovieCancel }>
+                    { editForm }
+                </Modal>
+                <h4>Movie Details</h4>
                 { form }
             </div>
         );
@@ -212,14 +130,17 @@ const mapStateToProps = state => {
     return {
         loading: state.movies.loading,
         token: state.auth.token,
-        selectedMovie: state.editMovie.editableMovie
+        selectedMovie: state.editMovie.editableMovie,
+        editingMode: state.editMovie.editingMode
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
         onMovieChange: (movie, token) => dispatch(actions.changeMovie(movie, token)),
-        onMovieCancel: () => dispatch(actions.cancelMovie())
+        onMovieCancel: () => dispatch(actions.cancelMovie()),
+        changeMovieInit: () => dispatch(actions.changeMovieInit())
+
     }
 };
 

@@ -38,7 +38,6 @@ class Movies extends Component {
         let movieData = this.props.movies.filter(obj => {
             return obj.id === id;
         })
-        this.props.changeMovieInit();
         this.props.history.push('/film/'+id);
         this.props.selectedMovie(movieData[0]);
         //editingForm = <MovieEditForm editingFilm={ movieData[0] }/>
@@ -81,7 +80,7 @@ class Movies extends Component {
 
         let movies = <Spinner/>;
         if(!this.props.loading){
-            movies = (
+            movies = this.props.error ? <h4>{this.props.error}</h4> : (
                 this.props.movies.map(movie => (
                     <Movie 
                         key = { movie.id }
@@ -108,7 +107,6 @@ const mapDispatchToProps = dispatch => {
     return {
         onFetchMovies: (token) => dispatch(action.fetchMovies(token)),
         onMovieCancel: () => dispatch(action.cancelMovie()),
-        changeMovieInit: () => dispatch(action.changeMovieInit()),
         onSearchMovie: (movieName) => dispatch(action.searchMovie(movieName)),
         selectedMovie: (movieData) => dispatch(action.selectedMovie(movieData))
     };
@@ -118,8 +116,8 @@ const mapStateToProps = state => {
     return {
         movies: state.movies.movies,
         loading: state.movies.loading,
-        editingMode: state.movies.editingMode,
-        token: state.auth.token
+        token: state.auth.token,
+        error: state.movies.error
     }
 }
 

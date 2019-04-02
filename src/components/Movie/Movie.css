@@ -7,6 +7,7 @@
     margin: 10px;
     box-sizing: border-box;
     overflow: auto;
+    cursor: pointer;
 }
 
 .Movie img {
