@@ -1,6 +1,6 @@
 .MovieEdit {
     margin: 20px auto;
-    width: 80%;
+    width: 85%;
     text-align: center;
     border-radius: 15px;
     box-shadow: 0 2px 3px #ccc;
@@ -9,8 +9,41 @@
     box-sizing: border-box;
 }
 
-@media (min-width: 600px){
-    .MovieEdit {
-        width: 500px;
+.MovieEdit img {
+    float: left;
+    padding: 4px;
+    margin: 0 6px 4px 0;
+    width: 300px;
+    height: 445px;
+}
+
+.MovieEdit form {
+    width: 75%;
+    display: inline-block;
+}
+
+@media (max-width: 1600px){
+    .MovieEdit form{
+        width: 70%;
     }
+}
+
+@media (max-width: 1360px){
+    .MovieEdit form{
+        width: 60%;
+    }
+}
+
+@media (max-width: 1030px){
+    .MovieEdit form{
+        width: 50%;
+    }
+    .MovieEdit img {
+        display: block;
+        margin: 10px auto;
+        width: 300px;
+        height: 445px;
+        float: none;
+    }
+
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Redirect, Switch } from 'react-router-dom';
 
 import Layout from './hoc/Layout/Layout';
 import Auth from './containers/Auth/Auth';
@@ -16,7 +16,7 @@ class App extends Component {
             <Route path = "/auth" component = { Auth }/>
             <Route path = "/logout" component = { Logout }/>
             <Route path = "/dashboard" component = { Movies }/>
-            <Route path = "/film" component = { MovieDetails }/>
+            <Route path = "/film/:id" component = { MovieDetails }/>
             <Route path = "/" exact render = {() => (<Redirect to = "/dashboard"/>)}/>
           </Switch>
         </Layout>

@@ -12,14 +12,7 @@ const changeMovieStart = (state, action) => {
 }
 
 const changeMovieSuccess = (state, action) => {
-    let newMovies = state.movies;
-    for (let i in newMovies){
-        if(newMovies[i].id === action.movie[0].id){
-            newMovies[i].data = action.movie[0].data;
-            break;
-        }
-    }
-    return updateObject(state, { movies: newMovies, loading: false, editingMode: false });
+    return updateObject(state, { editableMovie: action.movie[0], loading: false, editingMode: false });
 }
 
 const changeMovieFail = (state, action) => {

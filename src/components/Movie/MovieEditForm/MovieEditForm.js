@@ -1,5 +1,7 @@
+/* eslint-disable no-restricted-globals */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import Input from '../../UI/Input/Input';
 import Button from '../../UI/Button/Button';
@@ -116,6 +118,7 @@ class MovieEditForm extends Component {
 
     movieSubmitHandler = (event) => {
         event.preventDefault();
+        this.props.history.goBack();
         const formData = {};
         for(let formElementId in this.state.movieForm) {
             formData[formElementId] = this.state.movieForm[formElementId].value;
@@ -128,6 +131,7 @@ class MovieEditForm extends Component {
 
     movieCancelHandler = (event) => {
         event.preventDefault();
+        this.props.history.goBack();
         this.props.onMovieCancel();
     }
 
@@ -167,6 +171,16 @@ class MovieEditForm extends Component {
         }
 
         return isValid;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const updatedForm = {...this.state.movieForm}
+        for(let key in updatedForm){
+            if(updatedForm[key].value !== nextProps.editingFilm.data[key]){
+                updatedForm[key].value = nextProps.editingFilm.data[key]
+            }
+            this.setState({movieForm: updatedForm});
+        }
     }
 
     render() {
@@ -211,7 +225,8 @@ class MovieEditForm extends Component {
 const mapStateToProps = state => {
     return {
         loading: state.movies.loading,
-        token: state.auth.token
+        token: state.auth.token,
+        editingFilm: state.editMovie.editableMovie
     }
 };
 
@@ -222,4 +237,4 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(MovieEditForm, axios));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(withErrorHandler(MovieEditForm, axios)));

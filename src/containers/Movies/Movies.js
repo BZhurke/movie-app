@@ -40,7 +40,6 @@ class Movies extends Component {
         })
         this.props.history.push('/film/'+id);
         this.props.selectedMovie(movieData[0]);
-        //editingForm = <MovieEditForm editingFilm={ movieData[0] }/>
     }
 
     inputChangeHandler = (event, controlName) => {
