@@ -105,9 +105,14 @@ class MovieDetails extends Component {
     editMovieHandler = (id) => {
         let movieData = this.props.movies.filter(obj => {
             return obj.id === id;
-        })
-        this.props.history.push('/film/'+id);
-        this.props.selectedMovieHandler(movieData[0]);
+        });
+        if(!movieData[0].data.Plot){
+            this.props.fetchSelectedMovie(id);
+        }
+        if(this.props.match.params.id !== id){
+            this.props.history.push('/film/'+id);
+            this.props.selectedMovieHandler(movieData[0]);
+        }
     }
 
 
@@ -150,8 +155,9 @@ class MovieDetails extends Component {
             updatedPoster.posterUrl = nextProps.selectedMovie.data.Poster;
             this.setState({moviePoster: updatedPoster});
         }  
-        if(nextProps.history.action ==='POP' && nextProps.movies.length !== 0 && nextProps.selectedMovie){
-            let movieData = nextProps.movies.filter(obj => {
+        if(nextProps.movies.length !== 0 && nextProps.selectedMovie && nextProps.selectedMovie.id !== nextProps.match.params.id) {
+            let movieData = [];
+            movieData = nextProps.movies.filter(obj => {
                 return obj.id === nextProps.match.params.id;
             });
             if(movieData.length !==0) {
