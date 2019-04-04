@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Modal from '../../components/UI/Modal/Modal';
-import MovieEditForm from '../../components/Movie/MovieEditForm/MovieEditForm';
+import Spinner from '../../components/UI/Spinner/Spinner';
+import MovieDetailsForm from '../../components/Movie/MovieDetailsForm/MovieDetailsForm';
+import classes from '../../components/Movie/MovieDetailsForm/MovieDetailsForm.css'
 import Movie from '../../components/Movie/Movie';
-import classes from '../../components/Movie/MovieEditForm/MovieEditForm.css'
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../axios-movie';
-import * as actions from '../../store/actions/index';
+import * as action from '../../store/actions/index';
 
 let editForm = null;
 
@@ -79,7 +79,9 @@ class MovieDetails extends Component {
                 value: '' 
             }
         },
-        movieId: null
+        moviePoster: {
+            posterUrl: ''
+        }
     }
 
     editingModeCloseHandler = () => {
@@ -91,12 +93,13 @@ class MovieDetails extends Component {
         event.preventDefault()
         this.props.history.push(window.location.pathname  + '/edit');
         this.props.changeMovieInit();
-        editForm = <MovieEditForm editingFilm = { movieData }/>
+        editForm = <MovieDetailsForm editingFilm = { movieData }/>
     }
 
     movieCancelHandler = (event) => {
         event.preventDefault();
         this.props.history.goBack()
+        this.props.onMovieCancel();
     }
 
     editMovieHandler = (id) => {
@@ -109,30 +112,51 @@ class MovieDetails extends Component {
 
 
     componentDidMount() {
-        if(this.props.selectedMovie){
+        if(!this.props.selectedMovie && this.props.movies.length === 0 ) {
+            let pathNameMas = window.location.pathname.split('/');
+            let id = pathNameMas.filter((el) => el.includes('tt') )
+            this.props.fetchSelectedMovie(id);
+            this.props.onFetchMovies();
+        }
+        else if(!this.props.selectedMovie.Plot && this.props.movies.length !== 0){
+            let pathNameMas = window.location.pathname.split('/');
+            let id = pathNameMas.filter((el) => el.includes('tt') )
+            this.props.fetchSelectedMovie(id);
+        } 
+        else if(this.props.selectedMovie && this.props.movies.length !== 0) {
             const updatedDetails = {...this.state.movieDetails};
+            const updatedPoster = {...this.state.moviePoster};
             for(let key in updatedDetails){
                 if(updatedDetails[key].value !== this.props.selectedMovie.data[key]){
                     updatedDetails[key].value = this.props.selectedMovie.data[key]
                 }
-                this.setState({movieDetails: updatedDetails});
+                this.setState({movieDetails: updatedDetails });
             }
+            updatedPoster.posterUrl = this.props.selectedMovie.data.Poster;
+            this.setState({moviePoster: updatedPoster});
         }
     }
 
     componentWillReceiveProps (nextProps){
-        const updatedDetails = {...this.state.movieDetails};
-        for(let key in updatedDetails){
-            if(updatedDetails[key].value !== nextProps.selectedMovie.data[key]){
-                updatedDetails[key].value = nextProps.selectedMovie.data[key]
+        if(nextProps.selectedMovie && nextProps.movies.length !== 0) {
+            const updatedDetails = { ...this.state.movieDetails };
+            const updatedPoster = { ...this.state.moviePoster };
+            for(let key in updatedDetails) {
+                if(updatedDetails[key].value !== nextProps.selectedMovie.data[key]) {
+                    updatedDetails[key].value = nextProps.selectedMovie.data[key]
+                }
+                this.setState({ movieDetails: updatedDetails });
             }
-            this.setState({movieDetails: updatedDetails});
-        }
-        if(nextProps.history.action ==='POP'){
+            updatedPoster.posterUrl = nextProps.selectedMovie.data.Poster;
+            this.setState({moviePoster: updatedPoster});
+        }  
+        if(nextProps.history.action ==='POP' && nextProps.movies.length !== 0 && nextProps.selectedMovie){
             let movieData = nextProps.movies.filter(obj => {
                 return obj.id === nextProps.match.params.id;
-            })
-            nextProps.selectedMovieHandler(movieData[0]);
+            });
+            if(movieData.length !==0) {
+                nextProps.selectedMovieHandler(movieData[0]);
+            } 
         }
     }
 
@@ -145,12 +169,12 @@ class MovieDetails extends Component {
                 config: this.state.movieDetails[key]
             });
         }
-        let form = (this.props.movies.length === 0 ? <Redirect to='/'/> : null);
-        if (this.props.movies.length !== 0) {
+        let form = <Spinner/>;
+        if (!this.props.loadingSelectedMovie && this.props.movies.length !== 0) {
             form = (
                 <div>
                     <div>
-                        <img key ={ this.props.selectedMovie.data.Poster } src = { this.props.selectedMovie.data.Poster } alt = { this.props.selectedMovie.data.Poster } />
+                        <img key ={ this.state.moviePoster.posterUrl } src = { this.state.moviePoster.posterUrl } alt = { this.state.moviePoster.posterUrl } />
                     </div>
                     <form>
                         {formElementsArray.map(formElement => (
@@ -168,17 +192,17 @@ class MovieDetails extends Component {
             );
         }
         
-        const movies = this.props.movies.filter(m => {return m.id !== this.props.selectedMovie.id});
-        let movie = ( this.props.movies.length === 0 ? null :
-            movies.splice(-3).map(movie => (
-                <Movie 
-                    key = { movie.id }
-                    data = { movie.data }
-                    clicked = {() => this.editMovieHandler(movie.id)}
-                    />
-        )));
+        let movie = <Spinner/>;
+        if(this.props.movies.length !== 0 && !this.props.loadingSelectedMovie) {
+            movie = this.props.movies.filter(m => {return m.id !== this.props.selectedMovie.id}).splice(-3).map(movie => (
+                    <Movie 
+                        key = { movie.id }
+                        data = { movie.data }
+                        clicked = {() => this.editMovieHandler(movie.id)}
+                        />
+            ));
+        }
 
-        
         return (
             <>
                 <div className={ classes.MovieEdit }>
@@ -200,19 +224,21 @@ class MovieDetails extends Component {
 const mapStateToProps = state => {
     return {
         token: state.auth.token,
-        loading: state.editMovie.loading,
+        loadingSelectedMovie: state.editMovie.loading,
         selectedMovie: state.editMovie.editableMovie,
         editingMode: state.editMovie.editingMode,
-        movies: state.movies.movies
+        movies: state.movies.movies,
+        loadingMovies: state.movies.loading
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onMovieCancel: () => dispatch(actions.cancelMovie()),
-        changeMovieInit: () => dispatch(actions.changeMovieInit()),
-        selectedMovieHandler: (movieData) => dispatch(actions.selectedMovie(movieData)),
-        onFetchMovies: () => dispatch(actions.fetchMovies()),
+        fetchSelectedMovie: (movieId) => dispatch(action.fetchSelectedMovie(movieId)),
+        onFetchMovies: () => dispatch(action.fetchMovies()),
+        selectedMovieHandler: (movieData) => dispatch(action.selectedMovie(movieData)),
+        onMovieCancel: () => dispatch(action.cancelMovie()),
+        changeMovieInit: () => dispatch(action.changeMovieInit())
     }
 };
 

@@ -72,7 +72,7 @@ export const searchMovie = (movieName) => {
                     for (let key in response.data.Search){
                         fetchedMovies.push({
                             data: response.data.Search[key],
-                            id: response.data.Search[key].imdbID
+                            id: response.data.Search[key].imdbID.replace(/\s/g, '')
                         });
                     }
                     dispatch(searchSuccess(fetchedMovies));

@@ -59,3 +59,45 @@ export const selectedMovie = (selectedMovie) => {
         selectedMovie: selectedMovie
     };
 }
+
+export const fetchSelectedMovieStart = () => {
+    return {
+        type: actionTypes.FETCH_MOVIE_START
+    };
+};
+
+export const fetchSelectedMovieSuccess = (fetchedMovie) => {
+    return {
+        type: actionTypes.FETCH_MOVIE_SUCCESS,
+        movie: fetchedMovie
+    };
+};
+
+export const fetchSelectedMovieFail = (error) => {
+    return {
+        type: actionTypes.FETCH_MOVIE_FAIL,
+        error: error
+    };
+};
+
+export const fetchSelectedMovie = (movieId) => {
+    return dispatch => {
+        dispatch (fetchSelectedMovieStart());
+        let url = 'https://www.omdbapi.com/?apikey=a9d8a61e&i=' + movieId;
+        axios.get(url)
+            .then(response => {
+                if(response) {
+                    const fetchedMovie = {
+                        data: response.data,
+                        id: response.data.imdbID
+                    }
+                    dispatch(fetchSelectedMovieSuccess(fetchedMovie));
+                } else {
+                    dispatch(fetchSelectedMovieFail(response.data));
+                }
+            })
+            .catch(error => {
+                dispatch(fetchSelectedMovieFail(error));
+            })
+    };
+}

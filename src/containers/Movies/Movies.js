@@ -27,7 +27,7 @@ class Movies extends Component {
     
 
     componentDidMount(){
-        this.props.onFetchMovies(this.props.token);
+        this.props.onFetchMovies();
     }
 
     editingModeCloseHandler = () => {
@@ -90,9 +90,9 @@ class Movies extends Component {
         }
         return (
             <React.Fragment>
-                <form style={{ display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'center' }} onSubmit = {this.submitHandler}>
+                <form style={{ display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'center' }} >
                     { searchForm }
-                    <Button btnType="Success">SEARCH</Button>
+                    <Button btnType="Success" clicked = { this.submitHandler }>SEARCH</Button>
                 </form>
                 <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
                     { movies }
@@ -104,7 +104,7 @@ class Movies extends Component {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchMovies: (token) => dispatch(action.fetchMovies(token)),
+        onFetchMovies: () => dispatch(action.fetchMovies()),
         onMovieCancel: () => dispatch(action.cancelMovie()),
         onSearchMovie: (movieName) => dispatch(action.searchMovie(movieName)),
         selectedMovie: (movieData) => dispatch(action.selectedMovie(movieData))

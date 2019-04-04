@@ -31,6 +31,20 @@ const selectedMovie = (state, action) => {
     return updateObject(state, { editableMovie: action.selectedMovie });
 }
 
+const fetchSelectedMovieStart = (state, action) => {
+    return updateObject(state, { loading: true } );
+}
+
+const fetchSelectedMovieFail = (state, action) => {
+    return updateObject(state, { loading: false } );
+}
+
+const fetchSelectedMovieSuccess = (state, action) => {
+    return updateObject(state, { editableMovie: action.movie, loading: false, editingMode: false });
+}
+
+
+
 const reducer = (state = initState, action) => {
     switch (action.type) {
         case actionTypes.CHANGE_MOVIE_START: return changeMovieStart(state, action);
@@ -39,6 +53,9 @@ const reducer = (state = initState, action) => {
         case actionTypes.CHANGE_MOVIE_CANCEL: return cancelMovie(state, action);
         case actionTypes.CHANGE_MOVIE_INIT: return changeMovieInit(state, action);
         case actionTypes.SELECTED_MOVIE: return selectedMovie(state, action);
+        case actionTypes.FETCH_MOVIE_START: return fetchSelectedMovieStart(state, action);
+        case actionTypes.FETCH_MOVIE_SUCCESS: return fetchSelectedMovieSuccess(state, action);
+        case actionTypes.FETCH_MOVIE_FAIL: return fetchSelectedMovieFail(state, action);
         default: return state
     }
 }

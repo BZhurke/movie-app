@@ -20,7 +20,7 @@ const fetchMoviesFail = (state, action) => {
 }
 
 const searchMovieStart = (state, action) => {
-    return updateObject(state, {movies: [], loading: true, error: null});
+    return updateObject(state, {loading: true, error: null});
 }
 
 const searchMovieFail = (state, action) => {

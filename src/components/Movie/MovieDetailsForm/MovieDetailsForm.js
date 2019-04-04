@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import Input from '../../UI/Input/Input';
 import Button from '../../UI/Button/Button';
 import Spinner from '../../UI/Spinner/Spinner';
-import classes from './MovieEditForm.css'
+import classes from './MovieDetailsForm.css'
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../../axios-movie';
 import * as actions from '../../../store/actions/index';
