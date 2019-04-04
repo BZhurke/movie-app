@@ -31,6 +31,13 @@ const searchMovieSuccess = (state, action) => {
     return updateObject(state, { movies: action.movies, loading: false, error: null });
 }
 
+const updateMovieList = (state, action) => {
+    let updatedMovies = [...state.movies];
+    const index = updatedMovies.findIndex(m => m.id === action.movie.id);
+    updatedMovies[index] = action.movie;
+    return updateObject(state, {movies: updatedMovies});
+}
+
 const reducer = (state = initState, action) => {
     switch(action.type){
         case actionTypes.FETCH_MOVIES_START: return fetchMoviesStart(state, action);
@@ -39,6 +46,7 @@ const reducer = (state = initState, action) => {
         case actionTypes.SEARCH_MOVIES_START: return searchMovieStart(state, action);
         case actionTypes.SEARCH_MOVIES_FAIL: return searchMovieFail(state, action);
         case actionTypes.SEARCH_MOVIES_SUCCESS: return searchMovieSuccess(state, action);
+        case actionTypes.UPDATE_MOVIES_LIST: return updateMovieList(state, action);
         default: return state;
     }
 };

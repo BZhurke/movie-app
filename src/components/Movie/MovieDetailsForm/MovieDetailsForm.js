@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -51,7 +50,9 @@ class MovieEditForm extends Component {
                 },
                 value: this.props.editingFilm.data.Year,
                 validation: {
-                    required: true
+                    required: true,
+                    minLength: 4,
+                    isNumeric: true
                 },
                 valid: true,
                 touched: false
@@ -163,6 +164,10 @@ class MovieEditForm extends Component {
         
         if (rules.required) {
             isValid = value.trim() !== '' && isValid;
+        }
+
+        if (rules.minLength) {
+            isValid = value.length >= rules.minLength && isValid
         }
 
         if (rules.isNumeric) {

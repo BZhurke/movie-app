@@ -61,6 +61,13 @@ export const searchFail = (error) => {
     };
 };
 
+export const updateMovieList = (movie) => {
+    return {
+        type: actionTypes.UPDATE_MOVIES_LIST,
+        movie: movie
+    }
+}
+
 export const searchMovie = (movieName) => {
     return dispatch => {
         dispatch (searchStart());

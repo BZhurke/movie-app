@@ -4,7 +4,8 @@ export {
         } from './auth.js';
 export { 
         fetchMovies,
-        searchMovie
+        searchMovie,
+        updateMovieList
         } from './movie';
 export {
         changeMovie,

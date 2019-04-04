@@ -4,7 +4,8 @@ import { updateObject } from '../utility';
 const initState = {
     editableMovie: null,
     loading: false,
-    editingMode: false
+    editingMode: false,
+    error: null
 }
 
 const changeMovieStart = (state, action) => {
@@ -16,7 +17,7 @@ const changeMovieSuccess = (state, action) => {
 }
 
 const changeMovieFail = (state, action) => {
-    return updateObject(state, { loading: false });
+    return updateObject(state, { loading: false, error: action.error });
 }
 
 const cancelMovie = (state, action) => {
@@ -36,14 +37,12 @@ const fetchSelectedMovieStart = (state, action) => {
 }
 
 const fetchSelectedMovieFail = (state, action) => {
-    return updateObject(state, { loading: false } );
+    return updateObject(state, { loading: false, error: action.error } );
 }
 
 const fetchSelectedMovieSuccess = (state, action) => {
     return updateObject(state, { editableMovie: action.movie, loading: false, editingMode: false });
 }
-
-
 
 const reducer = (state = initState, action) => {
     switch (action.type) {

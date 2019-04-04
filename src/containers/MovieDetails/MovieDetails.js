@@ -12,9 +12,13 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../axios-movie';
 import * as action from '../../store/actions/index';
 
-let editForm = null;
-
 class MovieDetails extends Component {
+    constructor(props) {
+        super(props);
+        // eslint-disable-next-line
+        let editForm = null;
+    }
+
     state = {
         movieDetails: {
             Title: {
@@ -25,7 +29,7 @@ class MovieDetails extends Component {
                     label: 'Title',
                     readOnly: 'readOnly'
                 },
-                value: '' 
+                value: ''
             },
             Year: {
                 elementType: 'input',
@@ -35,7 +39,7 @@ class MovieDetails extends Component {
                     label: 'Year',
                     readOnly: 'readOnly'
                 },
-                value: '' 
+                value: ''
             },
             Released: {
                 elementType: 'input',
@@ -45,7 +49,7 @@ class MovieDetails extends Component {
                     label: 'Released',
                     readOnly: 'readOnly'
                 },
-                value: '' 
+                value: ''
             },
             Runtime: {
                 elementType: 'input',
@@ -55,7 +59,7 @@ class MovieDetails extends Component {
                     label: 'Runtime',
                     readOnly: 'readOnly'
                 },
-                value: '' 
+                value: ''
             },
             Actors: {
                 elementType: 'input',
@@ -65,8 +69,7 @@ class MovieDetails extends Component {
                     label: 'Actors',
                     readOnly: 'readOnly'
                 },
-                value: '' 
-
+                value: ''
             },
             Plot: {
                 elementType: 'textarea',
@@ -76,7 +79,7 @@ class MovieDetails extends Component {
                     label: 'Plot',
                     readOnly: 'readOnly'
                 },
-                value: '' 
+                value: ''
             }
         },
         moviePoster: {
@@ -93,7 +96,7 @@ class MovieDetails extends Component {
         event.preventDefault()
         this.props.history.push(window.location.pathname  + '/edit');
         this.props.changeMovieInit();
-        editForm = <MovieDetailsForm editingFilm = { movieData }/>
+        this.editForm = <MovieDetailsForm editingFilm = { movieData }/>
     }
 
     movieCancelHandler = (event) => {
@@ -108,11 +111,25 @@ class MovieDetails extends Component {
         });
         if(!movieData[0].data.Plot){
             this.props.fetchSelectedMovie(id);
+            this.props.updateMovieList(this.props.selectedMovie);
         }
         if(this.props.match.params.id !== id){
             this.props.history.push('/film/'+id);
             this.props.selectedMovieHandler(movieData[0]);
         }
+    }
+
+    updateState = (newValues) => {
+        const updatedDetails = {...this.state.movieDetails};
+        const updatedPoster = {...this.state.moviePoster};
+        for(let key in updatedDetails){
+            if(updatedDetails[key].value !== newValues.selectedMovie.data[key]){
+                updatedDetails[key].value = newValues.selectedMovie.data[key]
+            }
+            this.setState({movieDetails: updatedDetails });
+        }
+        updatedPoster.posterUrl = newValues.selectedMovie.data.Poster;
+        this.setState({moviePoster: updatedPoster});
     }
 
 
@@ -129,32 +146,14 @@ class MovieDetails extends Component {
             this.props.fetchSelectedMovie(id);
         } 
         else if(this.props.selectedMovie && this.props.movies.length !== 0) {
-            const updatedDetails = {...this.state.movieDetails};
-            const updatedPoster = {...this.state.moviePoster};
-            for(let key in updatedDetails){
-                if(updatedDetails[key].value !== this.props.selectedMovie.data[key]){
-                    updatedDetails[key].value = this.props.selectedMovie.data[key]
-                }
-                this.setState({movieDetails: updatedDetails });
-            }
-            updatedPoster.posterUrl = this.props.selectedMovie.data.Poster;
-            this.setState({moviePoster: updatedPoster});
+            this.updateState(this.props);
         }
     }
 
     componentWillReceiveProps (nextProps){
         if(nextProps.selectedMovie && nextProps.movies.length !== 0) {
-            const updatedDetails = { ...this.state.movieDetails };
-            const updatedPoster = { ...this.state.moviePoster };
-            for(let key in updatedDetails) {
-                if(updatedDetails[key].value !== nextProps.selectedMovie.data[key]) {
-                    updatedDetails[key].value = nextProps.selectedMovie.data[key]
-                }
-                this.setState({ movieDetails: updatedDetails });
-            }
-            updatedPoster.posterUrl = nextProps.selectedMovie.data.Poster;
-            this.setState({moviePoster: updatedPoster});
-        }  
+            this.updateState(nextProps);
+        }
         if(nextProps.movies.length !== 0 && nextProps.selectedMovie && nextProps.selectedMovie.id !== nextProps.match.params.id) {
             let movieData = [];
             movieData = nextProps.movies.filter(obj => {
@@ -214,7 +213,7 @@ class MovieDetails extends Component {
                 <div className={ classes.MovieEdit }>
                     <Modal  show = { this.props.editingMode }
                         modalClosed = { this.movieCancelHandler }>
-                        { editForm }
+                        { this.editForm }
                     </Modal>
                     <h4>Movie Details</h4>
                     { form }
@@ -244,7 +243,8 @@ const mapDispatchToProps = dispatch => {
         onFetchMovies: () => dispatch(action.fetchMovies()),
         selectedMovieHandler: (movieData) => dispatch(action.selectedMovie(movieData)),
         onMovieCancel: () => dispatch(action.cancelMovie()),
-        changeMovieInit: () => dispatch(action.changeMovieInit())
+        changeMovieInit: () => dispatch(action.changeMovieInit()),
+        updateMovieList: (movie) => dispatch(action.updateMovieList(movie)) 
     }
 };
 
